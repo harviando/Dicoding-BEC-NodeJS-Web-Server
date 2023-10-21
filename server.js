@@ -12,7 +12,18 @@ const requestListener = (request, response) => {
         response.end('This is GET Response');
     }
     if (method === 'POST'){
-        response.end('This is POST Response');
+        let body = [];
+
+        request.on('data', (chunk) => {
+            body.push(chunk);
+        });
+
+        request.on('end', () => {
+            body = Buffer.concat(body).toString();
+
+            const {name} = JSON.parse(body);
+            response.end(`<h1>Hai, ${name}!</h1>`);
+        })
     }
     if (method === 'PUT'){
         response.end('This is PUT Response');
