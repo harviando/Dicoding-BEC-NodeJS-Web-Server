@@ -1,0 +1,1 @@
+console.log("Hello world i'm about to become a great cloud architect!");
