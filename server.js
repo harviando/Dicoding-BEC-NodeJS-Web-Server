@@ -10,12 +10,15 @@ const requestListener = (request, response) => {
 
     if (url === '/') {
         if (method === 'GET'){
+            response.statusCode = 200;
             response.end('This is Home Page.');
         } else {
+            response.statusCode = 400;
             response.end(`This is url cannot be accessed with ${method} method.`);
         }
     } else if (url === '/about') {
         if (method === 'GET'){
+            response.statusCode = 200;
             response.end('This is About Page.');
         } else if (method === 'POST') {
             let body = [];
@@ -28,12 +31,15 @@ const requestListener = (request, response) => {
             body = Buffer.concat(body).toString();
 
             const {name} = JSON.parse(body);
+            response.statusCode = 200;
             response.end(`Hello, ${name}! This is About Page.`);
             });
         } else {
-           response.end(`This is url cannot be accessed with ${method} method.`); 
+            response.statusCode = 400; 
+            response.end(`This is url cannot be accessed with ${method} method.`); 
         }
     } else {
+        response.statusCode = 404;
         response.end(`This page url is not found.`);
     }
 };
