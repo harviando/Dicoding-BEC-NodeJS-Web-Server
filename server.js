@@ -6,30 +6,35 @@ const requestListener = (request, response) => {
     response.setHeader('Content-Type', 'text/html');
     response.statusCode = 200;
 
-    const {method} = request;
+    const {method, url} = request;
 
-    if (method === 'GET'){
-        response.end('This is GET Response');
-    }
-    if (method === 'POST'){
-        let body = [];
+    if (url === '/') {
+        if (method === 'GET'){
+            response.end('This is Home Page.');
+        } else {
+            response.end(`This is url cannot be accessed with ${method} method.`);
+        }
+    } else if (url === '/about') {
+        if (method === 'GET'){
+            response.end('This is About Page.');
+        } else if (method === 'POST') {
+            let body = [];
 
-        request.on('data', (chunk) => {
+            request.on('data', (chunk) => {
             body.push(chunk);
-        });
+            });
 
-        request.on('end', () => {
+            request.on('end', () => {
             body = Buffer.concat(body).toString();
 
             const {name} = JSON.parse(body);
-            response.end(`<h1>Hai, ${name}!</h1>`);
-        })
-    }
-    if (method === 'PUT'){
-        response.end('This is PUT Response');
-    }
-    if (method === 'DELETE'){
-        response.end('This is DELETE Response');
+            response.end(`Hello, ${name}! This is About Page.`);
+            });
+        } else {
+           response.end(`This is url cannot be accessed with ${method} method.`); 
+        }
+    } else {
+        response.end(`This page url is not found.`);
     }
 };
 
